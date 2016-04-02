@@ -1,0 +1,1140 @@
+
+!Command: show running-config
+!Time: Sun Apr  3 00:48:52 2016
+
+version 7.2(0)N1(1)
+feature fcoe
+hostname N5548_A
+feature npiv
+feature telnet
+feature http-server
+feature scp-server
+cfs ipv4 distribute
+cfs eth distribute
+feature private-vlan
+feature interface-vlan
+feature hsrp
+feature lacp
+feature dhcp
+feature vpc
+logging level vpc 6
+feature lldp
+feature fex
+logging level aaa 5
+logging level cdp 6
+logging level dhcp_snoop 6
+logging level flogi 5
+logging level hsrp 6
+logging level interface-vlan 5
+logging level monitor 6
+logging level radius 5
+logging level session-mgr 6
+logging level spanning-tree 6
+logging level track 6
+username admin password 5 $5$k..DRxs9$9xVYhisN1dVJzee2SM5xFzyLds0vErB1dYgC/c/eFy5  role network-admin
+username bedergez password 5 $1$s6cAAC5F$o6F.ZSaEc9Voen97S75dT.  role network-admin
+username gabszabo password 5 $1$aiZUkiGE$8nyHNFlqetQPmxlVvNDeI1  role network-admin
+no password strength-check
+ip domain-lookup
+ip name-server 10.62.44.27
+logging event link-status default
+service unsupported-transceiver
+policy-map type network-qos fcoe-jumbo-nq-policy
+  class type network-qos class-fcoe
+    pause no-drop
+    mtu 2158
+  class type network-qos class-default
+    mtu 9216
+    multicast-optimize
+system qos
+  service-policy type qos input fcoe-default-in-policy
+  service-policy type queuing input fcoe-default-in-policy
+  service-policy type queuing output fcoe-default-out-policy
+  service-policy type network-qos fcoe-jumbo-nq-policy
+fex 110
+  pinning max-links 1
+  description "FEX0110"
+fex 111
+  pinning max-links 1
+  description "FEX0111"
+fex 130
+  pinning max-links 1
+  description "FEX0131"
+fex 131
+  pinning max-links 1
+  description "FEX0131"
+configure profile budlab_N5K
+configure terminal
+slot 1
+snmp-server user admin network-admin auth md5 0xae2418d56a16b02a74e84912f25c64a8 priv 0xae2418d56a16b02a74e84912f25c64a8 localizedkey
+snmp-server user bedergez network-admin auth md5 0xae2418d56a16b02a74e84912f25c64a8 priv 0xae2418d56a16b02a74e84912f25c64a8 localizedkey
+snmp-server user gabszabo network-admin auth md5 0xbee5d25fcd1c9491243d65dfc1b7ffe1 priv 0xbee5d25fcd1c9491243d65dfc1b7ffe1 localizedkey
+rmon event 1 log trap public description FATAL(1) owner PMON@FATAL
+rmon event 2 log trap public description CRITICAL(2) owner PMON@CRITICAL
+rmon event 3 log trap public description ERROR(3) owner PMON@ERROR
+rmon event 4 log trap public description WARNING(4) owner PMON@WARNING
+rmon event 5 log trap public description INFORMATION(5) owner PMON@INFO
+snmp-server community budlab group network-admin
+ntp server 10.62.45.1 use-vrf management
+ntp source-interface  mgmt0
+ip route 0.0.0.0/0 10.10.119.1
+no ip igmp snooping
+vlan 1
+vlan 10
+  name LABNET
+vlan 11
+  name VCE-MANAGEMENT
+vlan 12
+  name VCE-FT
+vlan 13
+  name VCE-IP-STORAGE
+vlan 14
+  name VCE-PRODUCTION
+vlan 44
+  name BUDLAB44
+vlan 144
+  name CORP
+vlan 191
+  name Marcika
+vlan 300
+  name OpenStack_Tenant_VLAN_300
+vlan 301
+  name OpenStack_Tenant_VLAN_301
+vlan 302
+  name OpenStack_Tenant_VLAN_302
+vlan 303
+  name OpenStack_Tenant_VLAN_303
+vlan 304
+  name OpenStack_Tenant_VLAN_304
+vlan 305
+  name OpenStack_Tenant_VLAN_305
+vlan 306
+  name OpenStack_Tenant_VLAN_306
+vlan 307
+  name OpenStack_Tenant_VLAN_307
+vlan 308
+  name OpenStack_Tenant_VLAN_308
+vlan 309
+  name OpenStack_Tenant_VLAN_309
+vlan 310
+  name OpenStack_Tenant_VLAN_310
+vlan 311
+  name OpenStack_Tenant_VLAN_311
+vlan 396
+  name OpenStack_Tenant_VxLAN_VLAN
+vlan 397
+  name OpenStack_Storage_Mgmt_VLAN
+vlan 398
+  name OpenStack_Storage_VLAN
+vlan 399
+  name OpenStack_Internal_API_VLAN
+vlan 444
+  name BUDLAB444
+vlan 500
+  name N1K-CONTROL
+vlan 501
+  name N1K-PACKET
+vlan 665
+  name ASA_EXT_LEG
+vlan 1099
+  name vpninside
+vlan 1100
+  name PXE
+vlan 1101
+  name vsan1
+vlan 1102
+  name vsan2
+vlan 1103
+  name vmotion1
+vlan 1104
+  name vmotion2
+vlan 1106
+  name 1106-Reserved
+vlan 1199
+vlan 2000
+  name NETAPPCluster
+vlan 2001
+  name NETAPP_ACP
+vlan 2002
+  name cluster2
+vlan 3000
+  name esxmgmt
+vlan 3001
+  name vmotion
+vlan 3002
+  name vmdata3002
+vlan 3003
+  name vmdata3003
+vlan 3004
+  name vmdata3004
+vlan 3005
+  name vmdata3005
+vlan 3006-3008
+vlan 3009
+  name ipstorage
+vlan 3010
+  fcoe vsan 10
+spanning-tree vlan 1-3967,4048-4093 priority 36864
+service dhcp
+ip dhcp relay
+vrf context management
+  ip route 0.0.0.0/0 10.62.45.1
+vpc domain 1
+  peer-switch
+  role priority 10
+  peer-keepalive destination 10.62.45.77
+  delay restore 150
+  peer-gateway
+vsan database
+  vsan 10 
+device-alias database
+  device-alias name dclab_cl01_0c pwwn 20:0f:00:a0:98:53:09:56
+  device-alias name dclab_cl02_0c pwwn 20:11:00:a0:98:53:09:56
+  device-alias name FLEXPODCL-01_0c pwwn 50:0a:09:81:88:8f:12:26
+  device-alias name FLEXPODCL-02_0c pwwn 50:0a:09:83:88:df:11:4b
+  device-alias name esx-blade-1336-fc0 pwwn 20:00:00:25:b5:00:0a:03
+  device-alias name esx-blade-1337-fc0 pwwn 20:00:00:25:b5:00:0a:04
+  device-alias name linux-blade-1395-fc0 pwwn 20:00:00:25:b5:00:8a:03
+device-alias commit
+fcdomain fcid database
+  vsan 10 wwn 20:00:00:25:b5:00:0a:06 fcid 0xbf0040 dynamic
+  vsan 10 wwn 20:00:00:25:b5:00:0a:07 fcid 0xbf0046 dynamic
+  vsan 10 wwn 20:00:00:25:b5:00:0a:08 fcid 0xbf0047 dynamic
+  vsan 10 wwn 20:00:00:25:b5:00:0a:09 fcid 0xbf0048 dynamic
+  vsan 10 wwn 20:00:00:25:b5:00:9a:03 fcid 0xbf0049 dynamic
+  vsan 10 wwn 20:1b:00:a0:98:53:09:56 fcid 0xbf0081 dynamic
+  vsan 10 wwn 20:01:00:a0:98:53:09:56 fcid 0xbf00a1 dynamic
+  vsan 10 wwn 20:00:00:25:b5:00:0a:0b fcid 0xbf004a dynamic
+  vsan 10 wwn 20:00:00:25:b5:00:0a:0a fcid 0xbf004b dynamic
+  vsan 10 wwn 20:0d:00:a0:98:53:09:56 fcid 0xbf00a2 dynamic
+  vsan 10 wwn 20:0b:00:a0:98:53:09:56 fcid 0xbf0082 dynamic
+  vsan 10 wwn 22:a9:00:2a:6a:99:98:7f fcid 0xbf004c dynamic
+  vsan 10 wwn 20:00:00:25:b5:00:0a:0e fcid 0xbf004d dynamic
+  vsan 10 wwn 22:b2:8c:60:4f:8e:89:bf fcid 0xbf004e dynamic
+  vsan 10 wwn 20:00:00:25:b5:00:8a:02 fcid 0xbf004f dynamic
+  vsan 10 wwn 20:00:00:25:b5:00:8a:01 fcid 0xbf0050 dynamic
+  vsan 10 wwn 20:00:00:25:b5:00:8a:03 fcid 0xbf0051 dynamic
+!             [linux-blade-1395-fc0]
+  vsan 10 wwn 20:00:00:25:b5:00:8a:04 fcid 0xbf0053 dynamic
+  vsan 10 wwn 50:0a:09:81:88:8f:12:26 fcid 0xbf0000 dynamic
+!             [FLEXPODCL-01_0c]
+  vsan 10 wwn 50:0a:09:83:88:df:11:4b fcid 0xbf0020 dynamic
+!             [FLEXPODCL-02_0c]
+  vsan 10 wwn 20:00:00:25:b5:00:0a:01 fcid 0xbf0041 dynamic
+  vsan 10 wwn 20:00:00:25:b5:00:0a:02 fcid 0xbf0042 dynamic
+  vsan 10 wwn 20:00:00:25:b5:00:0a:03 fcid 0xbf0043 dynamic
+!             [esx-blade-1336-fc0]
+  vsan 10 wwn 20:00:00:25:b5:00:0a:04 fcid 0xbf0044 dynamic
+!             [esx-blade-1337-fc0]
+  vsan 10 wwn 20:00:00:25:b5:00:0a:05 fcid 0xbf0045 dynamic
+  vsan 10 wwn 22:b2:00:2a:6a:99:98:7f fcid 0xbf0052 dynamic
+  vsan 10 wwn 20:0f:00:a0:98:53:09:56 fcid 0xbf0080 dynamic
+!             [dclab_cl01_0c]
+  vsan 10 wwn 20:11:00:a0:98:53:09:56 fcid 0xbf00a0 dynamic
+!             [dclab_cl02_0c]
+
+
+interface Vlan1
+
+interface Vlan101
+
+interface Vlan1099
+  no shutdown
+  no ip redirects
+  ip address 10.10.99.2/23
+  hsrp version 2
+  hsrp 1099
+    priority 150
+    timers 1 3
+    ip 10.10.99.1
+
+interface Vlan1103
+  no shutdown
+  no ip redirects
+  ip address 10.10.103.9/24
+
+interface Vlan1199
+  no shutdown
+  no ip redirects
+  ip address 10.10.119.2/29
+
+interface port-channel1
+  description VPC peer-link
+  switchport mode trunk
+  switchport access vlan 11
+  spanning-tree port type network
+  vpc peer-link
+
+interface port-channel12
+  description Uplink to Hulk
+  switchport mode trunk
+  switchport trunk allowed vlan 1-1999, 2002-4094
+  speed 1000
+  vpc 12
+
+interface port-channel21
+  switchport mode trunk
+  switchport trunk allowed vlan 1-1999, 2002-4094
+  spanning-tree port type edge trunk
+  speed 10000
+  vpc 21
+
+interface port-channel23
+  switchport mode trunk
+  switchport trunk allowed vlan 1-1999, 2002-4094
+  spanning-tree port type edge trunk
+  speed 10000
+  vpc 23
+
+interface port-channel110
+  description FEX 110
+  switchport mode fex-fabric
+  fex associate 110
+
+interface port-channel111
+  description FEX 111
+  switchport mode fex-fabric
+  fex associate 111
+
+interface port-channel130
+  description FEX130
+  switchport mode fex-fabric
+  fex associate 130
+  vpc 130
+
+interface port-channel131
+  description FEX131
+  switchport mode fex-fabric
+  fex associate 131
+  vpc 131
+
+interface port-channel1112
+  description FLEXPODDR eth
+  switchport access vlan 1099
+  vpc 1112
+
+interface vfc27
+  bind interface Ethernet2/1
+  switchport description *** UCSPROD FCoE A ***
+  no shutdown
+
+interface vfc1247
+
+interface vfc1248
+vsan database
+  vsan 10 interface vfc1247
+  vsan 10 interface vfc1248
+  vsan 10 interface fc2/5
+  vsan 10 interface fc2/6
+  vsan 4094 interface fc2/7
+  vsan 4094 interface fc2/8
+
+interface fc2/1
+
+interface fc2/2
+
+interface fc2/3
+
+interface fc2/4
+
+interface fc2/5
+  switchport trunk mode off
+  no shutdown
+
+interface fc2/6
+  switchport trunk mode off
+  no shutdown
+
+interface fc2/7
+  switchport trunk mode off
+  no shutdown
+
+interface fc2/8
+  switchport trunk mode off
+  no shutdown
+
+interface Ethernet1/1
+  description VPC peer-link
+  switchport mode trunk
+  switchport access vlan 11
+  speed auto
+  channel-group 1 mode active
+
+interface Ethernet1/2
+  description VPC peer-link
+  switchport mode trunk
+  switchport access vlan 11
+  speed auto
+  channel-group 1 mode active
+
+interface Ethernet1/3
+  shutdown
+
+interface Ethernet1/4
+  shutdown
+
+interface Ethernet1/5
+  description FEX 110
+  switchport mode fex-fabric
+  fex associate 110
+  channel-group 110
+
+interface Ethernet1/6
+  description FEX 110
+  switchport mode fex-fabric
+  fex associate 110
+  channel-group 110
+
+interface Ethernet1/7
+  description FEX 111
+  switchport mode fex-fabric
+  fex associate 111
+  channel-group 111
+
+interface Ethernet1/8
+  description FEX 111
+  switchport mode fex-fabric
+  fex associate 111
+  channel-group 111
+
+interface Ethernet1/9
+  description FEX130
+  switchport mode fex-fabric
+  fex associate 130
+  channel-group 130
+
+interface Ethernet1/10
+  description FEX130
+  switchport mode fex-fabric
+  fex associate 130
+  channel-group 130
+
+interface Ethernet1/11
+  switchport mode fex-fabric
+  fex associate 131
+  channel-group 131
+
+interface Ethernet1/12
+  switchport mode fex-fabric
+  fex associate 131
+  channel-group 131
+
+interface Ethernet1/13
+  description AS C220M4
+  switchport mode trunk
+  spanning-tree port type edge trunk
+
+interface Ethernet1/14
+
+interface Ethernet1/15
+  shutdown
+
+interface Ethernet1/16
+  description Uplink to Hulk
+  switchport mode trunk
+  switchport trunk allowed vlan 1-1999, 2002-4094
+  speed 1000
+  channel-group 12 mode active
+
+interface Ethernet1/17
+  shutdown
+
+interface Ethernet1/18
+  shutdown
+
+interface Ethernet1/19
+  shutdown
+
+interface Ethernet1/20
+  shutdown
+
+interface Ethernet1/21
+  description FLEXPODCL-01:e1b
+  switchport mode trunk
+  switchport trunk allowed vlan 1-1999, 2002-4094
+  spanning-tree port type edge trunk
+  channel-group 21 mode active
+
+interface Ethernet1/22
+  shutdown
+
+interface Ethernet1/23
+  description FLEXPODCL-02:e1b
+  switchport mode trunk
+  switchport trunk allowed vlan 1-1999, 2002-4094
+  spanning-tree port type edge trunk
+  channel-group 23 mode active
+
+interface Ethernet1/24
+  shutdown
+
+interface Ethernet1/25
+  description INFRA C200M2
+  shutdown
+  switchport mode trunk
+  spanning-tree port type edge trunk
+
+interface Ethernet1/26
+
+interface Ethernet1/27
+  shutdown
+
+interface Ethernet1/28
+  shutdown
+
+interface Ethernet1/29
+  shutdown
+
+interface Ethernet1/30
+  shutdown
+
+interface Ethernet1/31
+  shutdown
+
+interface Ethernet1/32
+  shutdown
+
+interface Ethernet2/1
+  description UCSPROD A
+  switchport mode trunk
+  spanning-tree port type edge trunk
+
+interface Ethernet2/2
+  description INFRA C220M4-1
+  switchport mode trunk
+  spanning-tree port type edge trunk
+
+interface Ethernet2/3
+  description INFRA C220M4-2
+  switchport mode trunk
+  spanning-tree port type edge trunk
+
+interface Ethernet2/4
+
+interface Ethernet2/5
+
+interface Ethernet2/6
+  shutdown
+
+interface Ethernet2/7
+  shutdown
+
+interface Ethernet2/8
+  shutdown
+
+interface mgmt0
+  vrf member management
+  ip address 10.62.45.76/24
+
+interface Ethernet110/1/1
+  description FLEXPODDR eth
+  switchport access vlan 1099
+  channel-group 1112 mode active
+
+interface Ethernet110/1/2
+  description FLEXPODDR mgmt
+  switchport access vlan 1099
+  spanning-tree port type edge
+
+interface Ethernet110/1/3
+
+interface Ethernet110/1/4
+  description AS C220M4 mgmt
+  switchport access vlan 11
+  speed 100
+
+interface Ethernet110/1/5
+
+interface Ethernet110/1/6
+  description mrpink mgmt
+  switchport access vlan 44
+  spanning-tree port type edge
+
+interface Ethernet110/1/7
+  description mrbrown mgmt
+  switchport access vlan 44
+  spanning-tree port type edge
+
+interface Ethernet110/1/8
+  description mrwhite mgmt
+  switchport access vlan 44
+  spanning-tree port type edge
+
+interface Ethernet110/1/9
+  description mrblue mgmt
+  switchport access vlan 44
+  spanning-tree port type edge
+
+interface Ethernet110/1/10
+  description Eaton PDU
+  switchport access vlan 44
+
+interface Ethernet110/1/11
+  shutdown
+
+interface Ethernet110/1/12
+  description OpenStack Lab os-compute02 CIMC (gabszabo)
+  switchport access vlan 44
+  spanning-tree port type edge
+
+interface Ethernet110/1/13
+  description OpenStack Lab os-control CIMC (gabszabo)
+  switchport access vlan 44
+  spanning-tree port type edge
+
+interface Ethernet110/1/14
+  description OpenStack Lab os-network IMM (gabszabo)
+  switchport access vlan 44
+  spanning-tree port type edge
+
+interface Ethernet110/1/15
+  description OpenStack Lab os-compute01 CIMC (gabszabo)
+  switchport access vlan 44
+  spanning-tree port type edge
+
+interface Ethernet110/1/16
+  shutdown
+
+interface Ethernet110/1/17
+  shutdown
+
+interface Ethernet110/1/18
+  shutdown
+
+interface Ethernet110/1/19
+  description UCS-M-A mgmt
+  switchport access vlan 1099
+  spanning-tree port type edge
+
+interface Ethernet110/1/20
+
+interface Ethernet110/1/21
+  description netapp-A mgmt
+  switchport access vlan 1099
+  spanning-tree port type edge
+
+interface Ethernet110/1/22
+
+interface Ethernet110/1/23
+
+interface Ethernet110/1/24
+
+interface Ethernet110/1/25
+  description UCSPROD-A mgmt
+  shutdown
+  switchport access vlan 1099
+  spanning-tree port type edge
+
+interface Ethernet110/1/26
+
+interface Ethernet110/1/27
+  description eaton-A mgmt
+  switchport access vlan 1099
+  spanning-tree port type edge
+
+interface Ethernet110/1/28
+
+interface Ethernet110/1/29
+  description TERMSERV
+  switchport access vlan 1099
+
+interface Ethernet110/1/30
+
+interface Ethernet110/1/31
+
+interface Ethernet110/1/32
+
+interface Ethernet110/1/33
+
+interface Ethernet110/1/34
+
+interface Ethernet110/1/35
+
+interface Ethernet110/1/36
+
+interface Ethernet110/1/37
+  description mrblue data
+  switchport mode trunk
+  spanning-tree port type edge trunk
+
+interface Ethernet110/1/38
+
+interface Ethernet110/1/39
+  description mrwhite data
+  switchport mode trunk
+  spanning-tree port type edge trunk
+
+interface Ethernet110/1/40
+
+interface Ethernet110/1/41
+  description mrbrown data
+  switchport mode trunk
+  spanning-tree port type edge trunk
+
+interface Ethernet110/1/42
+
+interface Ethernet110/1/43
+  description mrpink data
+  switchport mode trunk
+  spanning-tree port type edge trunk
+
+interface Ethernet110/1/44
+
+interface Ethernet110/1/45
+
+interface Ethernet110/1/46
+  description INFRA C200M2 mgmt
+  shutdown
+  switchport access vlan 1099
+  spanning-tree port type edge
+
+interface Ethernet110/1/47
+  description UCS mgmt R01
+  switchport access vlan 1099
+  spanning-tree port type edge
+  speed 100
+
+interface Ethernet110/1/48
+  description UCS mgmt R01
+  switchport access vlan 1099
+  spanning-tree port type edge
+  speed 100
+
+interface Ethernet111/1/1
+  description OpenStack Lab os-director eth2 - OpenStack management (gabszabo)
+  switchport access vlan 10
+  spanning-tree port type edge
+
+interface Ethernet111/1/2
+  description OpenStack Lab os-director eth3 - OpenStack provisioning (gabszabo)
+  switchport access vlan 11
+  spanning-tree port type edge
+
+interface Ethernet111/1/3
+  description eth2 - OpenStack management (gabszabo)
+  switchport mode trunk
+  switchport trunk allowed vlan 10, 396-399
+  spanning-tree port type edge
+
+interface Ethernet111/1/4
+  description eth3 - OpenStack provisioning (gabszabo)
+  switchport access vlan 11
+  spanning-tree port type edge
+
+interface Ethernet111/1/5
+  description eth2 - OpenStack management (gabszabo)
+  switchport mode trunk
+  switchport trunk allowed vlan 10, 396-399
+  spanning-tree port type edge
+
+interface Ethernet111/1/6
+  description eth3 - OpenStack provisioning (gabszabo)
+  switchport access vlan 11
+  spanning-tree port type edge
+
+interface Ethernet111/1/7
+  switchport mode trunk
+  switchport trunk allowed vlan 10, 396-399
+
+interface Ethernet111/1/8
+  description eth3 - OpenStack provisioning (gabszabo)
+  switchport access vlan 11
+  spanning-tree port type edge
+
+interface Ethernet111/1/9
+
+interface Ethernet111/1/10
+
+interface Ethernet111/1/11
+
+interface Ethernet111/1/12
+
+interface Ethernet111/1/13
+
+interface Ethernet111/1/14
+
+interface Ethernet111/1/15
+
+interface Ethernet111/1/16
+
+interface Ethernet111/1/17
+
+interface Ethernet111/1/18
+
+interface Ethernet111/1/19
+
+interface Ethernet111/1/20
+
+interface Ethernet111/1/21
+
+interface Ethernet111/1/22
+
+interface Ethernet111/1/23
+
+interface Ethernet111/1/24
+
+interface Ethernet111/1/25
+
+interface Ethernet111/1/26
+
+interface Ethernet111/1/27
+
+interface Ethernet111/1/28
+
+interface Ethernet111/1/29
+
+interface Ethernet111/1/30
+
+interface Ethernet111/1/31
+
+interface Ethernet111/1/32
+
+
+interface Ethernet130/1/1
+  description OpenStack Lab os-compute1 CNA Port 1 - OpenStack tenant networks (gabszabo)
+
+
+interface Ethernet130/1/2
+
+
+interface Ethernet130/1/3
+  description OpenStack Lab os-compute2 CNA Port 1 - OpenStack tenant networks (gabszabo)
+
+
+interface Ethernet130/1/4
+  description OpenStack Lab os-control CNA Port 1 - OpenStack tenant networks (gabszabo)
+
+interface Ethernet130/1/5
+
+interface Ethernet130/1/6
+
+interface Ethernet130/1/7
+
+interface Ethernet130/1/8
+
+interface Ethernet130/1/9
+
+interface Ethernet130/1/10
+
+interface Ethernet130/1/11
+
+interface Ethernet130/1/12
+
+interface Ethernet130/1/13
+
+interface Ethernet130/1/14
+
+interface Ethernet130/1/15
+
+interface Ethernet130/1/16
+
+interface Ethernet130/1/17
+
+interface Ethernet130/1/18
+
+interface Ethernet130/1/19
+
+interface Ethernet130/1/20
+
+interface Ethernet130/1/21
+
+interface Ethernet130/1/22
+
+interface Ethernet130/1/23
+
+interface Ethernet130/1/24
+
+interface Ethernet130/1/25
+
+interface Ethernet130/1/26
+
+interface Ethernet130/1/27
+
+interface Ethernet130/1/28
+
+interface Ethernet130/1/29
+
+interface Ethernet130/1/30
+
+interface Ethernet130/1/31
+
+interface Ethernet130/1/32
+
+interface Ethernet130/1/33
+
+interface Ethernet130/1/34
+
+interface Ethernet130/1/35
+
+interface Ethernet130/1/36
+
+interface Ethernet130/1/37
+
+interface Ethernet130/1/38
+
+interface Ethernet130/1/39
+
+interface Ethernet130/1/40
+
+interface Ethernet130/1/41
+
+interface Ethernet130/1/42
+
+interface Ethernet130/1/43
+
+interface Ethernet130/1/44
+
+interface Ethernet130/1/45
+
+interface Ethernet130/1/46
+
+interface Ethernet130/1/47
+
+interface Ethernet130/1/48
+
+
+interface Ethernet131/1/1
+  description OpenStack Lab os-compute1 CNA Port 2 - OpenStack tenant networks (gabszabo)
+
+
+interface Ethernet131/1/2
+
+
+interface Ethernet131/1/3
+  description OpenStack Lab os-compute2 CNA Port 2 - OpenStack tenant networks (gabszabo)
+
+
+interface Ethernet131/1/4
+  description OpenStack Lab os-control CNA Port 2 - OpenStack tenant networks (gabszabo)
+
+interface Ethernet131/1/5
+
+interface Ethernet131/1/6
+
+interface Ethernet131/1/7
+
+interface Ethernet131/1/8
+
+interface Ethernet131/1/9
+
+interface Ethernet131/1/10
+
+interface Ethernet131/1/11
+
+interface Ethernet131/1/12
+
+interface Ethernet131/1/13
+
+interface Ethernet131/1/14
+
+interface Ethernet131/1/15
+
+interface Ethernet131/1/16
+
+interface Ethernet131/1/17
+
+interface Ethernet131/1/18
+
+interface Ethernet131/1/19
+
+interface Ethernet131/1/20
+
+interface Ethernet131/1/21
+
+interface Ethernet131/1/22
+
+interface Ethernet131/1/23
+
+interface Ethernet131/1/24
+
+interface Ethernet131/1/25
+
+interface Ethernet131/1/26
+
+interface Ethernet131/1/27
+
+interface Ethernet131/1/28
+
+interface Ethernet131/1/29
+
+interface Ethernet131/1/30
+
+interface Ethernet131/1/31
+
+interface Ethernet131/1/32
+
+interface Ethernet131/1/33
+
+interface Ethernet131/1/34
+
+interface Ethernet131/1/35
+
+interface Ethernet131/1/36
+
+interface Ethernet131/1/37
+
+interface Ethernet131/1/38
+
+interface Ethernet131/1/39
+
+interface Ethernet131/1/40
+
+interface Ethernet131/1/41
+
+interface Ethernet131/1/42
+
+interface Ethernet131/1/43
+
+interface Ethernet131/1/44
+
+interface Ethernet131/1/45
+
+interface Ethernet131/1/46
+
+interface Ethernet131/1/47
+
+interface Ethernet131/1/48
+clock timezone CET 1 0
+clock summer-time CEST 5 Sunday March 02:00 5 Sunday October 02:00 60
+cli alias name wr copy run start
+cli alias name hist show cli history unf 20
+line console
+line vty
+  exec-timeout 0
+boot kickstart bootflash:/n5000-uk9-kickstart.7.2.0.N1.1.bin
+boot system bootflash:/n5000-uk9.7.2.0.N1.1.bin 
+monitor session 1 type erspan-source
+  erspan-id 1
+  destination ip 10.61.109.242
+  source interface Ethernet1/13 both
+interface fc2/3
+  switchport speed 4000
+interface fc2/4
+  switchport speed 4000
+interface fc2/1
+  switchport mode F
+interface fc2/2
+interface fc2/3
+interface fc2/5
+  switchport mode F
+interface fc2/6
+  switchport mode F
+interface fc2/7
+  switchport mode F
+interface fc2/8
+  switchport mode F
+interface fc2/4
+  switchport fcrxbbcredit 64
+  switchport mode E
+logging logfile messages 6
+logging monitor 7
+zone mode enhanced vsan 10
+!Active Zone Database Section for vsan 10
+zone name test vsan 10
+    member pwwn 20:00:00:25:b5:db:0a:01
+
+zone name esx-blade-1336 vsan 10
+    member pwwn 20:00:00:25:b5:00:0a:03
+!               [esx-blade-1336-fc0]
+    member pwwn 20:0f:00:a0:98:53:09:56
+!               [dclab_cl01_0c]
+    member pwwn 20:11:00:a0:98:53:09:56
+!               [dclab_cl02_0c]
+
+zone name esx-blade-1337 vsan 10
+    member pwwn 20:00:00:25:b5:00:0a:04
+!               [esx-blade-1337-fc0]
+    member pwwn 20:0f:00:a0:98:53:09:56
+!               [dclab_cl01_0c]
+    member pwwn 20:11:00:a0:98:53:09:56
+!               [dclab_cl02_0c]
+
+zone name linux-blade-1395 vsan 10
+    member pwwn 20:00:00:25:b5:00:8a:03
+!               [linux-blade-1395-fc0]
+    member pwwn 20:0f:00:a0:98:53:09:56
+!               [dclab_cl01_0c]
+    member pwwn 20:11:00:a0:98:53:09:56
+!               [dclab_cl02_0c]
+
+zoneset name DCLAB vsan 10
+    member test
+    member esx-blade-1336
+    member esx-blade-1337
+    member linux-blade-1395
+
+zoneset activate name DCLAB vsan 10
+do clear zone database vsan 10
+!Full Zone Database Section for vsan 10
+zone name test vsan 10
+    member pwwn 20:00:00:25:b5:db:0a:01
+
+zone name esx-blade-1336 vsan 10
+    member pwwn 20:00:00:25:b5:00:0a:03
+!               [esx-blade-1336-fc0]
+    member pwwn 20:0f:00:a0:98:53:09:56
+!               [dclab_cl01_0c]
+    member pwwn 20:11:00:a0:98:53:09:56
+!               [dclab_cl02_0c]
+
+zone name esx-blade-1337 vsan 10
+    member pwwn 20:00:00:25:b5:00:0a:04
+!               [esx-blade-1337-fc0]
+    member pwwn 20:0f:00:a0:98:53:09:56
+!               [dclab_cl01_0c]
+    member pwwn 20:11:00:a0:98:53:09:56
+!               [dclab_cl02_0c]
+
+zone name linux-blade-1395 vsan 10
+    member pwwn 20:00:00:25:b5:00:8a:03
+!               [linux-blade-1395-fc0]
+    member pwwn 20:0f:00:a0:98:53:09:56
+!               [dclab_cl01_0c]
+    member pwwn 20:11:00:a0:98:53:09:56
+!               [dclab_cl02_0c]
+
+zoneset name DCLAB vsan 10
+    member test
+    member esx-blade-1336
+    member esx-blade-1337
+    member linux-blade-1395
+
+zone commit vsan 10
+
+configure sync
+switch-profile budlab_N5K
+  sync-peers destination 10.62.45.77
+
+  interface Ethernet130/1/1
+    switchport mode trunk
+    switchport trunk allowed vlan 300-311
+
+  interface Ethernet130/1/2
+    switchport mode trunk
+    switchport trunk allowed vlan 300-311
+
+  interface Ethernet130/1/3
+    switchport mode trunk
+    switchport trunk allowed vlan 300-311
+
+  interface Ethernet130/1/4
+    switchport mode trunk
+    switchport trunk allowed vlan 300-311
+
+  interface Ethernet131/1/1
+    switchport mode trunk
+    switchport trunk allowed vlan 300-311
+
+  interface Ethernet131/1/2
+    switchport mode trunk
+    switchport trunk allowed vlan 300-311
+
+  interface Ethernet131/1/3
+    switchport mode trunk
+    switchport trunk allowed vlan 300-311
+
+  interface Ethernet131/1/4
+    switchport mode trunk
+    switchport trunk allowed vlan 300-311
+  commit
+
