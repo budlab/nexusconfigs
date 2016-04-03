@@ -27,7 +27,8 @@
 
      git push https://username:password@github.com/budlab/configs.git
 
-####if making changes but someone else made changes before
+
+##if making changes but someone else made changes before
 ####pull the leatest files from github
 ####go to the configs directory (it is in the home directory in my case)
 
