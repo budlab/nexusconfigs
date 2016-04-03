@@ -1,6 +1,6 @@
 #HOWTO add configuration files to the repository
 
-##clone the repository to your pc (only have to do once)
+###clone the repository to your pc (only have to do once)
      
      git clone https://github.com/budlab/configs.git
 
