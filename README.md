@@ -29,7 +29,7 @@
 
 
 ##if making changes but someone else made changes before
-####pull the leatest files from github
+####pull the latest files from github
 ####go to the configs directory (it is in the home directory in my case)
 
      cd configs
