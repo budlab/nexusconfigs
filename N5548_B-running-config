@@ -1,6 +1,6 @@
 
 !Command: show running-config
-!Time: Sun Apr  3 00:07:48 2016
+!Time: Sun Apr  3 11:14:06 2016
 
 version 7.2(0)N1(1)
 feature fcoe
@@ -129,8 +129,6 @@ vlan 501
   name N1K-PACKET
 vlan 665
   name ASA_EXT_LEG
-vlan 700
-  name gittest
 vlan 1099
   name vpninside
 vlan 1100
