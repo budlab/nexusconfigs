@@ -1,6 +1,6 @@
 
 !Command: show running-config
-!Time: Sun Apr  3 15:27:06 2016
+!Time: Wed Apr  6 03:16:24 2016
 
 version 7.2(0)N1(1)
 feature fcoe
@@ -96,6 +96,16 @@ vlan 144
   name CORP
 vlan 191
   name Marcika
+vlan 295
+  name OpenStack_Provider_VLAN_295
+vlan 296
+  name OpenStack_Provider_VLAN_296
+vlan 297
+  name OpenStack_Provider_VLAN_297
+vlan 298
+  name OpenStack_Provider_VLAN_298
+vlan 299
+  name OpenStack_Provider_VLAN_299
 vlan 300
   name OpenStack_Tenant_VLAN_300
 vlan 301
@@ -120,6 +130,42 @@ vlan 310
   name OpenStack_Tenant_VLAN_310
 vlan 311
   name OpenStack_Tenant_VLAN_311
+vlan 312
+  name OpenStack_Tenant_VLAN_312
+vlan 313
+  name OpenStack_Tenant_VLAN_313
+vlan 314
+  name OpenStack_Tenant_VLAN_314
+vlan 315
+  name OpenStack_Tenant_VLAN_315
+vlan 316
+  name OpenStack_Tenant_VLAN_316
+vlan 317
+  name OpenStack_Tenant_VLAN_317
+vlan 318
+  name OpenStack_Tenant_VLAN_318
+vlan 319
+  name OpenStack_Tenant_VLAN_319
+vlan 320
+  name OpenStack_Tenant_VLAN_320
+vlan 321
+  name OpenStack_Tenant_VLAN_321
+vlan 322
+  name OpenStack_Tenant_VLAN_322
+vlan 323
+  name OpenStack_Tenant_VLAN_323
+vlan 324
+  name OpenStack_Tenant_VLAN_324
+vlan 325
+  name OpenStack_Tenant_VLAN_325
+vlan 326
+  name OpenStack_Tenant_VLAN_326
+vlan 327
+  name OpenStack_Tenant_VLAN_327
+vlan 328
+  name OpenStack_Tenant_VLAN_328
+vlan 329
+  name OpenStack_Tenant_VLAN_329
 vlan 396
   name OpenStack_Tenant_VxLAN_VLAN
 vlan 397
@@ -140,14 +186,8 @@ vlan 1099
   name vpninside
 vlan 1100
   name PXE
-vlan 1101
-  name vsan1
-vlan 1102
-  name vsan2
 vlan 1103
   name vmotion1
-vlan 1104
-  name vmotion2
 vlan 1106
   name 1106-Reserved
 vlan 1199
@@ -192,9 +232,10 @@ device-alias database
   device-alias name dclab_cl02_0c pwwn 20:11:00:a0:98:53:09:56
   device-alias name FLEXPODCL-01_0c pwwn 50:0a:09:81:88:8f:12:26
   device-alias name FLEXPODCL-02_0c pwwn 50:0a:09:83:88:df:11:4b
-  device-alias name esx-blade-1336-fc0 pwwn 20:00:00:25:b5:00:0a:03
-  device-alias name esx-blade-1337-fc0 pwwn 20:00:00:25:b5:00:0a:04
-  device-alias name linux-blade-1395-fc0 pwwn 20:00:00:25:b5:00:8a:03
+  device-alias name esx-blade-1476-fc0 pwwn 20:00:00:25:b5:01:0a:01
+  device-alias name esx-blade-1477-fc0 pwwn 20:00:00:25:b5:01:0a:02
+  device-alias name linux-blade-1478-fc0 pwwn 20:00:00:25:b5:01:8a:01
+  device-alias name linux-blade-1479-fc0 pwwn 20:00:00:25:b5:01:8a:02
 device-alias commit
 fcdomain fcid database
   vsan 10 wwn 20:00:00:25:b5:00:0a:06 fcid 0xbf0040 dynamic
@@ -214,8 +255,17 @@ fcdomain fcid database
   vsan 10 wwn 20:00:00:25:b5:00:8a:02 fcid 0xbf004f dynamic
   vsan 10 wwn 20:00:00:25:b5:00:8a:01 fcid 0xbf0050 dynamic
   vsan 10 wwn 20:00:00:25:b5:00:8a:03 fcid 0xbf0051 dynamic
-!             [linux-blade-1395-fc0]
   vsan 10 wwn 20:00:00:25:b5:00:8a:04 fcid 0xbf0053 dynamic
+  vsan 10 wwn 20:0e:00:a0:98:53:09:56 fcid 0xbf0083 dynamic
+  vsan 10 wwn 20:1a:00:a0:98:53:09:56 fcid 0xbf00a3 dynamic
+  vsan 10 wwn 20:00:00:25:b5:01:0a:02 fcid 0xbf0054 dynamic
+!             [esx-blade-1477-fc0]
+  vsan 10 wwn 20:00:00:25:b5:01:0a:01 fcid 0xbf0055 dynamic
+!             [esx-blade-1476-fc0]
+  vsan 10 wwn 20:00:00:25:b5:01:8a:01 fcid 0xbf0056 dynamic
+!             [linux-blade-1478-fc0]
+  vsan 10 wwn 20:00:00:25:b5:01:8a:02 fcid 0xbf0057 dynamic
+!             [linux-blade-1479-fc0]
   vsan 10 wwn 50:0a:09:81:88:8f:12:26 fcid 0xbf0000 dynamic
 !             [FLEXPODCL-01_0c]
   vsan 10 wwn 50:0a:09:83:88:df:11:4b fcid 0xbf0020 dynamic
@@ -223,9 +273,7 @@ fcdomain fcid database
   vsan 10 wwn 20:00:00:25:b5:00:0a:01 fcid 0xbf0041 dynamic
   vsan 10 wwn 20:00:00:25:b5:00:0a:02 fcid 0xbf0042 dynamic
   vsan 10 wwn 20:00:00:25:b5:00:0a:03 fcid 0xbf0043 dynamic
-!             [esx-blade-1336-fc0]
   vsan 10 wwn 20:00:00:25:b5:00:0a:04 fcid 0xbf0044 dynamic
-!             [esx-blade-1337-fc0]
   vsan 10 wwn 20:00:00:25:b5:00:0a:05 fcid 0xbf0045 dynamic
   vsan 10 wwn 22:b2:00:2a:6a:99:98:7f fcid 0xbf0052 dynamic
   vsan 10 wwn 20:0f:00:a0:98:53:09:56 fcid 0xbf0080 dynamic
@@ -237,6 +285,10 @@ fcdomain fcid database
 interface Vlan1
 
 interface Vlan101
+
+interface Vlan299
+  no shutdown
+  ip address 172.16.2.254/24
 
 interface Vlan1099
   no shutdown
@@ -1033,25 +1085,33 @@ zone mode enhanced vsan 10
 zone name test vsan 10
     member pwwn 20:00:00:25:b5:db:0a:01
 
-zone name esx-blade-1336 vsan 10
-    member pwwn 20:00:00:25:b5:00:0a:03
-!               [esx-blade-1336-fc0]
+zone name esx-blade-1476 vsan 10
+    member pwwn 20:00:00:25:b5:01:0a:01
+!               [esx-blade-1476-fc0]
     member pwwn 20:0f:00:a0:98:53:09:56
 !               [dclab_cl01_0c]
     member pwwn 20:11:00:a0:98:53:09:56
 !               [dclab_cl02_0c]
 
-zone name esx-blade-1337 vsan 10
-    member pwwn 20:00:00:25:b5:00:0a:04
-!               [esx-blade-1337-fc0]
+zone name esx-blade-1477 vsan 10
+    member pwwn 20:00:00:25:b5:01:0a:02
+!               [esx-blade-1477-fc0]
     member pwwn 20:0f:00:a0:98:53:09:56
 !               [dclab_cl01_0c]
     member pwwn 20:11:00:a0:98:53:09:56
 !               [dclab_cl02_0c]
 
-zone name linux-blade-1395 vsan 10
-    member pwwn 20:00:00:25:b5:00:8a:03
-!               [linux-blade-1395-fc0]
+zone name linux-blade-1478 vsan 10
+    member pwwn 20:00:00:25:b5:01:8a:01
+!               [linux-blade-1478-fc0]
+    member pwwn 20:0f:00:a0:98:53:09:56
+!               [dclab_cl01_0c]
+    member pwwn 20:11:00:a0:98:53:09:56
+!               [dclab_cl02_0c]
+
+zone name linux-blade-1479 vsan 10
+    member pwwn 20:00:00:25:b5:01:8a:02
+!               [linux-blade-1479-fc0]
     member pwwn 20:0f:00:a0:98:53:09:56
 !               [dclab_cl01_0c]
     member pwwn 20:11:00:a0:98:53:09:56
@@ -1059,9 +1119,10 @@ zone name linux-blade-1395 vsan 10
 
 zoneset name DCLAB vsan 10
     member test
-    member esx-blade-1336
-    member esx-blade-1337
-    member linux-blade-1395
+    member esx-blade-1476
+    member esx-blade-1477
+    member linux-blade-1478
+    member linux-blade-1479
 
 zoneset activate name DCLAB vsan 10
 do clear zone database vsan 10
@@ -1069,25 +1130,33 @@ do clear zone database vsan 10
 zone name test vsan 10
     member pwwn 20:00:00:25:b5:db:0a:01
 
-zone name esx-blade-1336 vsan 10
-    member pwwn 20:00:00:25:b5:00:0a:03
-!               [esx-blade-1336-fc0]
+zone name esx-blade-1476 vsan 10
+    member pwwn 20:00:00:25:b5:01:0a:01
+!               [esx-blade-1476-fc0]
     member pwwn 20:0f:00:a0:98:53:09:56
 !               [dclab_cl01_0c]
     member pwwn 20:11:00:a0:98:53:09:56
 !               [dclab_cl02_0c]
 
-zone name esx-blade-1337 vsan 10
-    member pwwn 20:00:00:25:b5:00:0a:04
-!               [esx-blade-1337-fc0]
+zone name esx-blade-1477 vsan 10
+    member pwwn 20:00:00:25:b5:01:0a:02
+!               [esx-blade-1477-fc0]
     member pwwn 20:0f:00:a0:98:53:09:56
 !               [dclab_cl01_0c]
     member pwwn 20:11:00:a0:98:53:09:56
 !               [dclab_cl02_0c]
 
-zone name linux-blade-1395 vsan 10
-    member pwwn 20:00:00:25:b5:00:8a:03
-!               [linux-blade-1395-fc0]
+zone name linux-blade-1478 vsan 10
+    member pwwn 20:00:00:25:b5:01:8a:01
+!               [linux-blade-1478-fc0]
+    member pwwn 20:0f:00:a0:98:53:09:56
+!               [dclab_cl01_0c]
+    member pwwn 20:11:00:a0:98:53:09:56
+!               [dclab_cl02_0c]
+
+zone name linux-blade-1479 vsan 10
+    member pwwn 20:00:00:25:b5:01:8a:02
+!               [linux-blade-1479-fc0]
     member pwwn 20:0f:00:a0:98:53:09:56
 !               [dclab_cl01_0c]
     member pwwn 20:11:00:a0:98:53:09:56
@@ -1095,9 +1164,10 @@ zone name linux-blade-1395 vsan 10
 
 zoneset name DCLAB vsan 10
     member test
-    member esx-blade-1336
-    member esx-blade-1337
-    member linux-blade-1395
+    member esx-blade-1476
+    member esx-blade-1477
+    member linux-blade-1478
+    member linux-blade-1479
 
 zone commit vsan 10
 
@@ -1107,34 +1177,34 @@ switch-profile budlab_N5K
 
   interface Ethernet130/1/1
     switchport mode trunk
-    switchport trunk allowed vlan 300-311
+    switchport trunk allowed vlan 295-329
 
   interface Ethernet130/1/2
     switchport mode trunk
-    switchport trunk allowed vlan 300-311
+    switchport trunk allowed vlan 295-329
 
   interface Ethernet130/1/3
     switchport mode trunk
-    switchport trunk allowed vlan 300-311
+    switchport trunk allowed vlan 295-329
 
   interface Ethernet130/1/4
     switchport mode trunk
-    switchport trunk allowed vlan 300-311
+    switchport trunk allowed vlan 295-329
 
   interface Ethernet131/1/1
     switchport mode trunk
-    switchport trunk allowed vlan 300-311
+    switchport trunk allowed vlan 295-329
 
   interface Ethernet131/1/2
     switchport mode trunk
-    switchport trunk allowed vlan 300-311
+    switchport trunk allowed vlan 295-329
 
   interface Ethernet131/1/3
     switchport mode trunk
-    switchport trunk allowed vlan 300-311
+    switchport trunk allowed vlan 295-329
 
   interface Ethernet131/1/4
     switchport mode trunk
-    switchport trunk allowed vlan 300-311
+    switchport trunk allowed vlan 295-329
   commit
 
