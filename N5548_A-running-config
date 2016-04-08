@@ -1,6 +1,6 @@
 
 !Command: show running-config
-!Time: Wed Apr  6 03:16:24 2016
+!Time: Fri Apr  8 13:06:01 2016
 
 version 7.2(0)N1(1)
 feature fcoe
@@ -236,6 +236,7 @@ device-alias database
   device-alias name esx-blade-1477-fc0 pwwn 20:00:00:25:b5:01:0a:02
   device-alias name linux-blade-1478-fc0 pwwn 20:00:00:25:b5:01:8a:01
   device-alias name linux-blade-1479-fc0 pwwn 20:00:00:25:b5:01:8a:02
+  device-alias name linux-blade-1487-fc0 pwwn 20:00:00:25:b5:01:8a:03
 device-alias commit
 fcdomain fcid database
   vsan 10 wwn 20:00:00:25:b5:00:0a:06 fcid 0xbf0040 dynamic
@@ -266,6 +267,10 @@ fcdomain fcid database
 !             [linux-blade-1478-fc0]
   vsan 10 wwn 20:00:00:25:b5:01:8a:02 fcid 0xbf0057 dynamic
 !             [linux-blade-1479-fc0]
+  vsan 10 wwn 20:17:00:a0:98:53:09:56 fcid 0xbf0084 dynamic
+  vsan 10 wwn 20:12:00:a0:98:53:09:56 fcid 0xbf00a4 dynamic
+  vsan 10 wwn 20:00:00:25:b5:01:8a:03 fcid 0xbf0058 dynamic
+!             [linux-blade-1487-fc0]
   vsan 10 wwn 50:0a:09:81:88:8f:12:26 fcid 0xbf0000 dynamic
 !             [FLEXPODCL-01_0c]
   vsan 10 wwn 50:0a:09:83:88:df:11:4b fcid 0xbf0020 dynamic
@@ -1117,12 +1122,21 @@ zone name linux-blade-1479 vsan 10
     member pwwn 20:11:00:a0:98:53:09:56
 !               [dclab_cl02_0c]
 
+zone name linux-blade-1487 vsan 10
+    member pwwn 20:00:00:25:b5:01:8a:03
+!               [linux-blade-1487-fc0]
+    member pwwn 20:0f:00:a0:98:53:09:56
+!               [dclab_cl01_0c]
+    member pwwn 20:11:00:a0:98:53:09:56
+!               [dclab_cl02_0c]
+
 zoneset name DCLAB vsan 10
     member test
     member esx-blade-1476
     member esx-blade-1477
     member linux-blade-1478
     member linux-blade-1479
+    member linux-blade-1487
 
 zoneset activate name DCLAB vsan 10
 do clear zone database vsan 10
@@ -1162,12 +1176,21 @@ zone name linux-blade-1479 vsan 10
     member pwwn 20:11:00:a0:98:53:09:56
 !               [dclab_cl02_0c]
 
+zone name linux-blade-1487 vsan 10
+    member pwwn 20:00:00:25:b5:01:8a:03
+!               [linux-blade-1487-fc0]
+    member pwwn 20:0f:00:a0:98:53:09:56
+!               [dclab_cl01_0c]
+    member pwwn 20:11:00:a0:98:53:09:56
+!               [dclab_cl02_0c]
+
 zoneset name DCLAB vsan 10
     member test
     member esx-blade-1476
     member esx-blade-1477
     member linux-blade-1478
     member linux-blade-1479
+    member linux-blade-1487
 
 zone commit vsan 10
 
