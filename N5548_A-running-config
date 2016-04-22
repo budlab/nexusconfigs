@@ -1,6 +1,6 @@
 
 !Command: show running-config
-!Time: Fri Apr  8 13:06:01 2016
+!Time: Fri Apr 22 17:40:15 2016
 
 version 7.2(0)N1(1)
 feature fcoe
@@ -83,7 +83,7 @@ vlan 1
 vlan 10
   name LABNET
 vlan 11
-  name VCE-MANAGEMENT
+  name dclab-11
 vlan 12
   name VCE-FT
 vlan 13
@@ -232,11 +232,6 @@ device-alias database
   device-alias name dclab_cl02_0c pwwn 20:11:00:a0:98:53:09:56
   device-alias name FLEXPODCL-01_0c pwwn 50:0a:09:81:88:8f:12:26
   device-alias name FLEXPODCL-02_0c pwwn 50:0a:09:83:88:df:11:4b
-  device-alias name esx-blade-1476-fc0 pwwn 20:00:00:25:b5:01:0a:01
-  device-alias name esx-blade-1477-fc0 pwwn 20:00:00:25:b5:01:0a:02
-  device-alias name linux-blade-1478-fc0 pwwn 20:00:00:25:b5:01:8a:01
-  device-alias name linux-blade-1479-fc0 pwwn 20:00:00:25:b5:01:8a:02
-  device-alias name linux-blade-1487-fc0 pwwn 20:00:00:25:b5:01:8a:03
 device-alias commit
 fcdomain fcid database
   vsan 10 wwn 20:00:00:25:b5:00:0a:06 fcid 0xbf0040 dynamic
@@ -260,21 +255,19 @@ fcdomain fcid database
   vsan 10 wwn 20:0e:00:a0:98:53:09:56 fcid 0xbf0083 dynamic
   vsan 10 wwn 20:1a:00:a0:98:53:09:56 fcid 0xbf00a3 dynamic
   vsan 10 wwn 20:00:00:25:b5:01:0a:02 fcid 0xbf0054 dynamic
-!             [esx-blade-1477-fc0]
   vsan 10 wwn 20:00:00:25:b5:01:0a:01 fcid 0xbf0055 dynamic
-!             [esx-blade-1476-fc0]
   vsan 10 wwn 20:00:00:25:b5:01:8a:01 fcid 0xbf0056 dynamic
-!             [linux-blade-1478-fc0]
   vsan 10 wwn 20:00:00:25:b5:01:8a:02 fcid 0xbf0057 dynamic
-!             [linux-blade-1479-fc0]
   vsan 10 wwn 20:17:00:a0:98:53:09:56 fcid 0xbf0084 dynamic
   vsan 10 wwn 20:12:00:a0:98:53:09:56 fcid 0xbf00a4 dynamic
   vsan 10 wwn 20:00:00:25:b5:01:8a:03 fcid 0xbf0058 dynamic
-!             [linux-blade-1487-fc0]
+  vsan 10 wwn 20:00:00:25:b5:01:8a:04 fcid 0xbf0059 dynamic
+  vsan 10 wwn 20:00:00:25:b5:01:0a:03 fcid 0xbf005a dynamic
   vsan 10 wwn 50:0a:09:81:88:8f:12:26 fcid 0xbf0000 dynamic
 !             [FLEXPODCL-01_0c]
   vsan 10 wwn 50:0a:09:83:88:df:11:4b fcid 0xbf0020 dynamic
 !             [FLEXPODCL-02_0c]
+  vsan 10 wwn 20:00:00:25:b5:01:0a:04 fcid 0xbf005b dynamic
   vsan 10 wwn 20:00:00:25:b5:00:0a:01 fcid 0xbf0041 dynamic
   vsan 10 wwn 20:00:00:25:b5:00:0a:02 fcid 0xbf0042 dynamic
   vsan 10 wwn 20:00:00:25:b5:00:0a:03 fcid 0xbf0043 dynamic
@@ -527,7 +520,6 @@ interface Ethernet1/24
 
 interface Ethernet1/25
   description INFRA C200M2
-  shutdown
   switchport mode trunk
   spanning-tree port type edge trunk
 
@@ -552,7 +544,7 @@ interface Ethernet1/32
   shutdown
 
 interface Ethernet2/1
-  description UCSPROD A
+  description UCSHI-A
   switchport mode trunk
   spanning-tree port type edge trunk
 
@@ -659,7 +651,8 @@ interface Ethernet110/1/18
   shutdown
 
 interface Ethernet110/1/19
-  description UCS-M-A mgmt
+  description UCSHI-A mgmt
+  shutdown
   switchport access vlan 1099
   spanning-tree port type edge
 
@@ -677,8 +670,7 @@ interface Ethernet110/1/23
 interface Ethernet110/1/24
 
 interface Ethernet110/1/25
-  description UCSPROD-A mgmt
-  shutdown
+  description UCSLO-A mgmt
   switchport access vlan 1099
   spanning-tree port type edge
 
@@ -1090,41 +1082,8 @@ zone mode enhanced vsan 10
 zone name test vsan 10
     member pwwn 20:00:00:25:b5:db:0a:01
 
-zone name esx-blade-1476 vsan 10
+zone name esx-blade-1502 vsan 10
     member pwwn 20:00:00:25:b5:01:0a:01
-!               [esx-blade-1476-fc0]
-    member pwwn 20:0f:00:a0:98:53:09:56
-!               [dclab_cl01_0c]
-    member pwwn 20:11:00:a0:98:53:09:56
-!               [dclab_cl02_0c]
-
-zone name esx-blade-1477 vsan 10
-    member pwwn 20:00:00:25:b5:01:0a:02
-!               [esx-blade-1477-fc0]
-    member pwwn 20:0f:00:a0:98:53:09:56
-!               [dclab_cl01_0c]
-    member pwwn 20:11:00:a0:98:53:09:56
-!               [dclab_cl02_0c]
-
-zone name linux-blade-1478 vsan 10
-    member pwwn 20:00:00:25:b5:01:8a:01
-!               [linux-blade-1478-fc0]
-    member pwwn 20:0f:00:a0:98:53:09:56
-!               [dclab_cl01_0c]
-    member pwwn 20:11:00:a0:98:53:09:56
-!               [dclab_cl02_0c]
-
-zone name linux-blade-1479 vsan 10
-    member pwwn 20:00:00:25:b5:01:8a:02
-!               [linux-blade-1479-fc0]
-    member pwwn 20:0f:00:a0:98:53:09:56
-!               [dclab_cl01_0c]
-    member pwwn 20:11:00:a0:98:53:09:56
-!               [dclab_cl02_0c]
-
-zone name linux-blade-1487 vsan 10
-    member pwwn 20:00:00:25:b5:01:8a:03
-!               [linux-blade-1487-fc0]
     member pwwn 20:0f:00:a0:98:53:09:56
 !               [dclab_cl01_0c]
     member pwwn 20:11:00:a0:98:53:09:56
@@ -1132,11 +1091,7 @@ zone name linux-blade-1487 vsan 10
 
 zoneset name DCLAB vsan 10
     member test
-    member esx-blade-1476
-    member esx-blade-1477
-    member linux-blade-1478
-    member linux-blade-1479
-    member linux-blade-1487
+    member esx-blade-1502
 
 zoneset activate name DCLAB vsan 10
 do clear zone database vsan 10
@@ -1144,41 +1099,8 @@ do clear zone database vsan 10
 zone name test vsan 10
     member pwwn 20:00:00:25:b5:db:0a:01
 
-zone name esx-blade-1476 vsan 10
+zone name esx-blade-1502 vsan 10
     member pwwn 20:00:00:25:b5:01:0a:01
-!               [esx-blade-1476-fc0]
-    member pwwn 20:0f:00:a0:98:53:09:56
-!               [dclab_cl01_0c]
-    member pwwn 20:11:00:a0:98:53:09:56
-!               [dclab_cl02_0c]
-
-zone name esx-blade-1477 vsan 10
-    member pwwn 20:00:00:25:b5:01:0a:02
-!               [esx-blade-1477-fc0]
-    member pwwn 20:0f:00:a0:98:53:09:56
-!               [dclab_cl01_0c]
-    member pwwn 20:11:00:a0:98:53:09:56
-!               [dclab_cl02_0c]
-
-zone name linux-blade-1478 vsan 10
-    member pwwn 20:00:00:25:b5:01:8a:01
-!               [linux-blade-1478-fc0]
-    member pwwn 20:0f:00:a0:98:53:09:56
-!               [dclab_cl01_0c]
-    member pwwn 20:11:00:a0:98:53:09:56
-!               [dclab_cl02_0c]
-
-zone name linux-blade-1479 vsan 10
-    member pwwn 20:00:00:25:b5:01:8a:02
-!               [linux-blade-1479-fc0]
-    member pwwn 20:0f:00:a0:98:53:09:56
-!               [dclab_cl01_0c]
-    member pwwn 20:11:00:a0:98:53:09:56
-!               [dclab_cl02_0c]
-
-zone name linux-blade-1487 vsan 10
-    member pwwn 20:00:00:25:b5:01:8a:03
-!               [linux-blade-1487-fc0]
     member pwwn 20:0f:00:a0:98:53:09:56
 !               [dclab_cl01_0c]
     member pwwn 20:11:00:a0:98:53:09:56
@@ -1186,11 +1108,7 @@ zone name linux-blade-1487 vsan 10
 
 zoneset name DCLAB vsan 10
     member test
-    member esx-blade-1476
-    member esx-blade-1477
-    member linux-blade-1478
-    member linux-blade-1479
-    member linux-blade-1487
+    member esx-blade-1502
 
 zone commit vsan 10
 
