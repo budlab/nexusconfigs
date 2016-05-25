@@ -1,6 +1,6 @@
 
 !Command: show running-config
-!Time: Fri Apr 22 16:40:39 2016
+!Time: Wed May 25 22:40:02 2016
 
 version 7.2(0)N1(1)
 feature fcoe
@@ -48,10 +48,10 @@ policy-map type network-qos fcoe-jumbo-nq-policy
     mtu 9216
     multicast-optimize
 system qos
-  service-policy type qos input fcoe-default-in-policy
+  service-policy type network-qos fcoe-jumbo-nq-policy
   service-policy type queuing input fcoe-default-in-policy
   service-policy type queuing output fcoe-default-out-policy
-  service-policy type network-qos fcoe-jumbo-nq-policy
+  service-policy type qos input fcoe-default-in-policy
 fex 120
   pinning max-links 1
   description "FEX0120"
@@ -63,6 +63,7 @@ fex 131
   description "FEX0131"
 snmp-server user admin network-admin auth md5 0x7642093d9e538fa59de2117497b99f66 priv 0x7642093d9e538fa59de2117497b99f66 localizedkey
 snmp-server user gabszabo network-admin auth md5 0x3b9645d2671c4f2a798aed32a380252b priv 0x3b9645d2671c4f2a798aed32a380252b localizedkey
+snmp-server host 10.62.42.3 traps version 2c public udp-port 2162
 rmon event 1 log trap public description FATAL(1) owner PMON@FATAL
 rmon event 2 log trap public description CRITICAL(2) owner PMON@CRITICAL
 rmon event 3 log trap public description ERROR(3) owner PMON@ERROR
@@ -173,6 +174,14 @@ vlan 500
   name N1K-CONTROL
 vlan 501
   name N1K-PACKET
+vlan 600
+  name cisco-600
+vlan 601
+  name cisco-601
+vlan 602
+  name didata-602
+vlan 603
+  name didata-603
 vlan 665
   name ASA_EXT_LEG
 vlan 1099
@@ -183,7 +192,7 @@ vlan 1103
   name vmotion1
 vlan 1106
   name 1106-Reserved
-vlan 1199
+vlan 1110-1119, 1199
 vlan 2000
   name NETAPPCluster
 vlan 2001
@@ -268,6 +277,11 @@ fcdomain fcid database
   vsan 20 wwn 20:00:00:25:b5:01:8b:04 fcid 0x510017 dynamic
   vsan 20 wwn 20:00:00:25:b5:01:0b:03 fcid 0x510018 dynamic
   vsan 20 wwn 20:00:00:25:b5:01:0b:04 fcid 0x510019 dynamic
+  vsan 1 wwn 50:06:01:69:08:60:33:2d fcid 0xb700ef dynamic
+  vsan 1 wwn 50:06:01:68:08:60:33:2d fcid 0xb701ef dynamic
+  vsan 20 wwn 50:06:01:69:08:60:33:2d fcid 0x5100ef dynamic
+  vsan 20 wwn 50:06:01:68:08:60:33:2d fcid 0x5101ef dynamic
+  vsan 20 wwn 20:00:00:25:b5:01:0b:05 fcid 0x51001a dynamic
 
 
 interface Vlan1
@@ -343,6 +357,8 @@ interface vfc27
   no shutdown
 vsan database
   vsan 20 interface vfc27
+  vsan 20 interface fc2/3
+  vsan 20 interface fc2/4
   vsan 20 interface fc2/5
   vsan 20 interface fc2/6
 
@@ -351,8 +367,10 @@ interface fc2/1
 interface fc2/2
 
 interface fc2/3
+  no shutdown
 
 interface fc2/4
+  no shutdown
 
 interface fc2/5
   switchport trunk mode off
@@ -881,6 +899,7 @@ interface fc2/6
 interface fc2/7
 interface fc2/8
 logging logfile messages 6
+logging server 10.62.42.3 5 use-vrf management
 zone mode enhanced vsan 20
 !Active Zone Database Section for vsan 20
 zone name test vsan 20
@@ -893,9 +912,59 @@ zone name esx-blade-1502 vsan 20
     member pwwn 20:14:00:a0:98:53:09:56
 !               [dclab_cl02_0d]
 
+zone name molesx-mgmt-1 vsan 20
+    member pwwn 20:00:00:25:b5:01:0b:01
+    member pwwn 50:06:01:69:08:60:33:2d
+    member pwwn 50:06:01:68:08:60:33:2d
+    member pwwn 20:18:00:a0:98:53:09:56
+!               [dclab_cl01_0d]
+    member pwwn 20:14:00:a0:98:53:09:56
+!               [dclab_cl02_0d]
+
+zone name molesx-mgmt-2 vsan 20
+    member pwwn 50:06:01:69:08:60:33:2d
+    member pwwn 50:06:01:68:08:60:33:2d
+    member pwwn 20:18:00:a0:98:53:09:56
+!               [dclab_cl01_0d]
+    member pwwn 20:14:00:a0:98:53:09:56
+!               [dclab_cl02_0d]
+    member pwwn 20:00:00:25:b5:01:0b:02
+
+zone name molesx-vdi-1 vsan 20
+    member pwwn 50:06:01:69:08:60:33:2d
+    member pwwn 50:06:01:68:08:60:33:2d
+    member pwwn 20:18:00:a0:98:53:09:56
+!               [dclab_cl01_0d]
+    member pwwn 20:14:00:a0:98:53:09:56
+!               [dclab_cl02_0d]
+    member pwwn 20:00:00:25:b5:01:0b:03
+
+zone name molesx-vdi-2 vsan 20
+    member pwwn 50:06:01:69:08:60:33:2d
+    member pwwn 50:06:01:68:08:60:33:2d
+    member pwwn 20:18:00:a0:98:53:09:56
+!               [dclab_cl01_0d]
+    member pwwn 20:14:00:a0:98:53:09:56
+!               [dclab_cl02_0d]
+    member pwwn 20:00:00:25:b5:01:0b:04
+
+zone name molesx-vdi-3 vsan 20
+    member pwwn 50:06:01:69:08:60:33:2d
+    member pwwn 50:06:01:68:08:60:33:2d
+    member pwwn 20:18:00:a0:98:53:09:56
+!               [dclab_cl01_0d]
+    member pwwn 20:14:00:a0:98:53:09:56
+!               [dclab_cl02_0d]
+    member pwwn 20:00:00:25:b5:01:0b:05
+
 zoneset name DCLAB vsan 20
     member test
     member esx-blade-1502
+    member molesx-mgmt-1
+    member molesx-mgmt-2
+    member molesx-vdi-1
+    member molesx-vdi-2
+    member molesx-vdi-3
 
 zoneset activate name DCLAB vsan 20
 do clear zone database vsan 20
@@ -910,9 +979,59 @@ zone name esx-blade-1502 vsan 20
     member pwwn 20:14:00:a0:98:53:09:56
 !               [dclab_cl02_0d]
 
+zone name molesx-mgmt-1 vsan 20
+    member pwwn 20:00:00:25:b5:01:0b:01
+    member pwwn 50:06:01:69:08:60:33:2d
+    member pwwn 50:06:01:68:08:60:33:2d
+    member pwwn 20:18:00:a0:98:53:09:56
+!               [dclab_cl01_0d]
+    member pwwn 20:14:00:a0:98:53:09:56
+!               [dclab_cl02_0d]
+
+zone name molesx-mgmt-2 vsan 20
+    member pwwn 50:06:01:69:08:60:33:2d
+    member pwwn 50:06:01:68:08:60:33:2d
+    member pwwn 20:18:00:a0:98:53:09:56
+!               [dclab_cl01_0d]
+    member pwwn 20:14:00:a0:98:53:09:56
+!               [dclab_cl02_0d]
+    member pwwn 20:00:00:25:b5:01:0b:02
+
+zone name molesx-vdi-1 vsan 20
+    member pwwn 50:06:01:69:08:60:33:2d
+    member pwwn 50:06:01:68:08:60:33:2d
+    member pwwn 20:18:00:a0:98:53:09:56
+!               [dclab_cl01_0d]
+    member pwwn 20:14:00:a0:98:53:09:56
+!               [dclab_cl02_0d]
+    member pwwn 20:00:00:25:b5:01:0b:03
+
+zone name molesx-vdi-2 vsan 20
+    member pwwn 50:06:01:69:08:60:33:2d
+    member pwwn 50:06:01:68:08:60:33:2d
+    member pwwn 20:18:00:a0:98:53:09:56
+!               [dclab_cl01_0d]
+    member pwwn 20:14:00:a0:98:53:09:56
+!               [dclab_cl02_0d]
+    member pwwn 20:00:00:25:b5:01:0b:04
+
+zone name molesx-vdi-3 vsan 20
+    member pwwn 50:06:01:69:08:60:33:2d
+    member pwwn 50:06:01:68:08:60:33:2d
+    member pwwn 20:18:00:a0:98:53:09:56
+!               [dclab_cl01_0d]
+    member pwwn 20:14:00:a0:98:53:09:56
+!               [dclab_cl02_0d]
+    member pwwn 20:00:00:25:b5:01:0b:05
+
 zoneset name DCLAB vsan 20
     member test
     member esx-blade-1502
+    member molesx-mgmt-1
+    member molesx-mgmt-2
+    member molesx-vdi-1
+    member molesx-vdi-2
+    member molesx-vdi-3
 
 zone commit vsan 20
 

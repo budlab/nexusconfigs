@@ -1,6 +1,6 @@
 
 !Command: show running-config
-!Time: Fri Apr 22 17:40:15 2016
+!Time: Wed May 25 23:39:27 2016
 
 version 7.2(0)N1(1)
 feature fcoe
@@ -47,10 +47,10 @@ policy-map type network-qos fcoe-jumbo-nq-policy
     mtu 9216
     multicast-optimize
 system qos
-  service-policy type qos input fcoe-default-in-policy
+  service-policy type network-qos fcoe-jumbo-nq-policy
   service-policy type queuing input fcoe-default-in-policy
   service-policy type queuing output fcoe-default-out-policy
-  service-policy type network-qos fcoe-jumbo-nq-policy
+  service-policy type qos input fcoe-default-in-policy
 fex 110
   pinning max-links 1
   description "FEX0110"
@@ -69,6 +69,7 @@ slot 1
 snmp-server user admin network-admin auth md5 0xae2418d56a16b02a74e84912f25c64a8 priv 0xae2418d56a16b02a74e84912f25c64a8 localizedkey
 snmp-server user bedergez network-admin auth md5 0xae2418d56a16b02a74e84912f25c64a8 priv 0xae2418d56a16b02a74e84912f25c64a8 localizedkey
 snmp-server user gabszabo network-admin auth md5 0xbee5d25fcd1c9491243d65dfc1b7ffe1 priv 0xbee5d25fcd1c9491243d65dfc1b7ffe1 localizedkey
+snmp-server host 10.62.42.3 traps version 2c public udp-port 2162
 rmon event 1 log trap public description FATAL(1) owner PMON@FATAL
 rmon event 2 log trap public description CRITICAL(2) owner PMON@CRITICAL
 rmon event 3 log trap public description ERROR(3) owner PMON@ERROR
@@ -180,6 +181,14 @@ vlan 500
   name N1K-CONTROL
 vlan 501
   name N1K-PACKET
+vlan 600
+  name cisco-600
+vlan 601
+  name cisco-601
+vlan 602
+  name didata-602
+vlan 603
+  name didata-603
 vlan 665
   name ASA_EXT_LEG
 vlan 1099
@@ -190,7 +199,7 @@ vlan 1103
   name vmotion1
 vlan 1106
   name 1106-Reserved
-vlan 1199
+vlan 1110-1119, 1199
 vlan 2000
   name NETAPPCluster
 vlan 2001
@@ -268,6 +277,11 @@ fcdomain fcid database
   vsan 10 wwn 50:0a:09:83:88:df:11:4b fcid 0xbf0020 dynamic
 !             [FLEXPODCL-02_0c]
   vsan 10 wwn 20:00:00:25:b5:01:0a:04 fcid 0xbf005b dynamic
+  vsan 1 wwn 50:06:01:61:08:60:33:2d fcid 0xe700ef dynamic
+  vsan 1 wwn 50:06:01:60:08:60:33:2d fcid 0xe701ef dynamic
+  vsan 10 wwn 50:06:01:61:08:60:33:2d fcid 0xbf00ef dynamic
+  vsan 10 wwn 50:06:01:60:08:60:33:2d fcid 0xbf01ef dynamic
+  vsan 10 wwn 20:00:00:25:b5:01:0a:05 fcid 0xbf005c dynamic
   vsan 10 wwn 20:00:00:25:b5:00:0a:01 fcid 0xbf0041 dynamic
   vsan 10 wwn 20:00:00:25:b5:00:0a:02 fcid 0xbf0042 dynamic
   vsan 10 wwn 20:00:00:25:b5:00:0a:03 fcid 0xbf0043 dynamic
@@ -281,6 +295,7 @@ fcdomain fcid database
 
 
 interface Vlan1
+  mac-address 0000.0000.0000
 
 interface Vlan101
 
@@ -374,6 +389,8 @@ interface vfc1248
 vsan database
   vsan 10 interface vfc1247
   vsan 10 interface vfc1248
+  vsan 10 interface fc2/3
+  vsan 10 interface fc2/4
   vsan 10 interface fc2/5
   vsan 10 interface fc2/6
   vsan 4094 interface fc2/7
@@ -384,8 +401,10 @@ interface fc2/1
 interface fc2/2
 
 interface fc2/3
+  no shutdown
 
 interface fc2/4
+  no shutdown
 
 interface fc2/5
   switchport trunk mode off
@@ -407,14 +426,12 @@ interface Ethernet1/1
   description VPC peer-link
   switchport mode trunk
   switchport access vlan 11
-  speed auto
   channel-group 1 mode active
 
 interface Ethernet1/2
   description VPC peer-link
   switchport mode trunk
   switchport access vlan 11
-  speed auto
   channel-group 1 mode active
 
 interface Ethernet1/3
@@ -632,7 +649,7 @@ interface Ethernet110/1/13
   spanning-tree port type edge
 
 interface Ethernet110/1/14
-  description OpenStack Lab os-network IMM (gabszabo)
+  description os-director IMM (gabszabo)
   switchport access vlan 44
   spanning-tree port type edge
 
@@ -696,13 +713,17 @@ interface Ethernet110/1/32
 interface Ethernet110/1/33
 
 interface Ethernet110/1/34
+  switchport access vlan 1099
 
 interface Ethernet110/1/35
+  switchport access vlan 1099
 
 interface Ethernet110/1/36
+  switchport access vlan 1099
 
 interface Ethernet110/1/37
   description mrblue data
+  no cdp enable
   switchport mode trunk
   spanning-tree port type edge trunk
 
@@ -717,6 +738,7 @@ interface Ethernet110/1/40
 
 interface Ethernet110/1/41
   description mrbrown data
+  no cdp enable
   switchport mode trunk
   spanning-tree port type edge trunk
 
@@ -728,12 +750,17 @@ interface Ethernet110/1/43
   spanning-tree port type edge trunk
 
 interface Ethernet110/1/44
-
-interface Ethernet110/1/45
-
-interface Ethernet110/1/46
   description INFRA C200M2 mgmt
   shutdown
+  switchport access vlan 1099
+
+interface Ethernet110/1/45
+  description UCS mgmt R03
+  switchport access vlan 1099
+  spanning-tree port type edge
+
+interface Ethernet110/1/46
+  description UCS mgmt R04
   switchport access vlan 1099
   spanning-tree port type edge
 
@@ -750,12 +777,12 @@ interface Ethernet110/1/48
   speed 100
 
 interface Ethernet111/1/1
-  description OpenStack Lab os-director eth2 - OpenStack management (gabszabo)
+  description OpenStack Lab os-director eno1 - OpenStack management (gabszabo)
   switchport access vlan 10
   spanning-tree port type edge
 
 interface Ethernet111/1/2
-  description OpenStack Lab os-director eth3 - OpenStack provisioning (gabszabo)
+  description OpenStack Lab os-director eno2 - OpenStack provisioning (gabszabo)
   switchport access vlan 11
   spanning-tree port type edge
 
@@ -1056,14 +1083,10 @@ monitor session 1 type erspan-source
   erspan-id 1
   destination ip 10.61.109.242
   source interface Ethernet1/13 both
-interface fc2/3
-  switchport speed 4000
-interface fc2/4
-  switchport speed 4000
 interface fc2/1
-  switchport mode F
 interface fc2/2
 interface fc2/3
+interface fc2/4
 interface fc2/5
   switchport mode F
 interface fc2/6
@@ -1072,10 +1095,8 @@ interface fc2/7
   switchport mode F
 interface fc2/8
   switchport mode F
-interface fc2/4
-  switchport fcrxbbcredit 64
-  switchport mode E
 logging logfile messages 6
+logging server 10.62.42.3 5 use-vrf management
 logging monitor 7
 zone mode enhanced vsan 10
 !Active Zone Database Section for vsan 10
@@ -1089,9 +1110,59 @@ zone name esx-blade-1502 vsan 10
     member pwwn 20:11:00:a0:98:53:09:56
 !               [dclab_cl02_0c]
 
+zone name molesx-mgmt-1 vsan 10
+    member pwwn 20:00:00:25:b5:01:0a:01
+    member pwwn 50:06:01:61:08:60:33:2d
+    member pwwn 50:06:01:60:08:60:33:2d
+    member pwwn 20:0f:00:a0:98:53:09:56
+!               [dclab_cl01_0c]
+    member pwwn 20:11:00:a0:98:53:09:56
+!               [dclab_cl02_0c]
+
+zone name molesx-mgmt-2 vsan 10
+    member pwwn 20:00:00:25:b5:01:0a:02
+    member pwwn 50:06:01:61:08:60:33:2d
+    member pwwn 50:06:01:60:08:60:33:2d
+    member pwwn 20:0f:00:a0:98:53:09:56
+!               [dclab_cl01_0c]
+    member pwwn 20:11:00:a0:98:53:09:56
+!               [dclab_cl02_0c]
+
+zone name molesx-vdi-1 vsan 10
+    member pwwn 20:00:00:25:b5:01:0a:03
+    member pwwn 50:06:01:61:08:60:33:2d
+    member pwwn 50:06:01:60:08:60:33:2d
+    member pwwn 20:0f:00:a0:98:53:09:56
+!               [dclab_cl01_0c]
+    member pwwn 20:11:00:a0:98:53:09:56
+!               [dclab_cl02_0c]
+
+zone name molesx-vdi-2 vsan 10
+    member pwwn 20:00:00:25:b5:01:0a:04
+    member pwwn 50:06:01:61:08:60:33:2d
+    member pwwn 50:06:01:60:08:60:33:2d
+    member pwwn 20:0f:00:a0:98:53:09:56
+!               [dclab_cl01_0c]
+    member pwwn 20:11:00:a0:98:53:09:56
+!               [dclab_cl02_0c]
+
+zone name molesx-vdi-3 vsan 10
+    member pwwn 20:00:00:25:b5:01:0a:05
+    member pwwn 50:06:01:61:08:60:33:2d
+    member pwwn 50:06:01:60:08:60:33:2d
+    member pwwn 20:0f:00:a0:98:53:09:56
+!               [dclab_cl01_0c]
+    member pwwn 20:11:00:a0:98:53:09:56
+!               [dclab_cl02_0c]
+
 zoneset name DCLAB vsan 10
     member test
     member esx-blade-1502
+    member molesx-mgmt-1
+    member molesx-mgmt-2
+    member molesx-vdi-1
+    member molesx-vdi-2
+    member molesx-vdi-3
 
 zoneset activate name DCLAB vsan 10
 do clear zone database vsan 10
@@ -1106,9 +1177,59 @@ zone name esx-blade-1502 vsan 10
     member pwwn 20:11:00:a0:98:53:09:56
 !               [dclab_cl02_0c]
 
+zone name molesx-mgmt-1 vsan 10
+    member pwwn 20:00:00:25:b5:01:0a:01
+    member pwwn 50:06:01:61:08:60:33:2d
+    member pwwn 50:06:01:60:08:60:33:2d
+    member pwwn 20:0f:00:a0:98:53:09:56
+!               [dclab_cl01_0c]
+    member pwwn 20:11:00:a0:98:53:09:56
+!               [dclab_cl02_0c]
+
+zone name molesx-mgmt-2 vsan 10
+    member pwwn 20:00:00:25:b5:01:0a:02
+    member pwwn 50:06:01:61:08:60:33:2d
+    member pwwn 50:06:01:60:08:60:33:2d
+    member pwwn 20:0f:00:a0:98:53:09:56
+!               [dclab_cl01_0c]
+    member pwwn 20:11:00:a0:98:53:09:56
+!               [dclab_cl02_0c]
+
+zone name molesx-vdi-1 vsan 10
+    member pwwn 20:00:00:25:b5:01:0a:03
+    member pwwn 50:06:01:61:08:60:33:2d
+    member pwwn 50:06:01:60:08:60:33:2d
+    member pwwn 20:0f:00:a0:98:53:09:56
+!               [dclab_cl01_0c]
+    member pwwn 20:11:00:a0:98:53:09:56
+!               [dclab_cl02_0c]
+
+zone name molesx-vdi-2 vsan 10
+    member pwwn 20:00:00:25:b5:01:0a:04
+    member pwwn 50:06:01:61:08:60:33:2d
+    member pwwn 50:06:01:60:08:60:33:2d
+    member pwwn 20:0f:00:a0:98:53:09:56
+!               [dclab_cl01_0c]
+    member pwwn 20:11:00:a0:98:53:09:56
+!               [dclab_cl02_0c]
+
+zone name molesx-vdi-3 vsan 10
+    member pwwn 20:00:00:25:b5:01:0a:05
+    member pwwn 50:06:01:61:08:60:33:2d
+    member pwwn 50:06:01:60:08:60:33:2d
+    member pwwn 20:0f:00:a0:98:53:09:56
+!               [dclab_cl01_0c]
+    member pwwn 20:11:00:a0:98:53:09:56
+!               [dclab_cl02_0c]
+
 zoneset name DCLAB vsan 10
     member test
     member esx-blade-1502
+    member molesx-mgmt-1
+    member molesx-mgmt-2
+    member molesx-vdi-1
+    member molesx-vdi-2
+    member molesx-vdi-3
 
 zone commit vsan 10
 
